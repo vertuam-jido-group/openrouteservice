@@ -37,3 +37,5 @@ docs/.vitepress/cache
 /.integration-scenarios/debian-12-jar-mvn/tmp/
 
 gatling-results/**
+# Artefato de build local do deploy (83MB, reproduzivel — ver documentacao/02-deploy-vps.md)
+documentacao/deploy/ors.jar

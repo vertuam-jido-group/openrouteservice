@@ -1,0 +1,30 @@
+# Openrouteservice — configuracao de producao Vertuam/Jido
+# Destino na VM: /opt/jido-rota/ors-config.yml
+# Docs: documentacao/02-deploy-vps.md
+
+server:
+  port: 8082                # nginx faz proxy para esta porta (a 8080 ja estava em uso na VPS)
+  servlet:
+    context-path: /ors
+
+logging:
+  file:
+    name: /opt/jido-rota/logs/ors.log
+  level:
+    root: WARN
+    org.heigit: INFO
+
+ors:
+  engine:
+    graphs_root_path: /opt/jido-rota/graphs
+    elevation:
+      cache_path: /opt/jido-rota/elevation_cache
+    profile_default:
+      build:
+        source_file: /opt/jido-rota/files/sul-latest.osm.pbf
+        # Elevacao DESATIVADA: o padrao do ORS e ativada, mas o download dos tiles
+        # SRTM/CGIAR e instavel e derruba o build do grafo. Nao faz falta para carro.
+        elevation: false
+    profiles:
+      driving-car:
+        enabled: true

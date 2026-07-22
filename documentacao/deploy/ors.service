@@ -1,0 +1,38 @@
+# Openrouteservice — unidade systemd
+# Destino na VM: /etc/systemd/system/ors.service
+# Docs: documentacao/02-deploy-vps.md
+#
+# Apos copiar:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now ors
+
+[Unit]
+Description=Openrouteservice (rotas.jido.cab)
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ors
+Group=ors
+WorkingDirectory=/opt/jido-rota
+
+# VPS de 4 GB: heap de 2.5g deixa ~1.5 GB para o SO
+ExecStart=/usr/bin/java -Xms1g -Xmx2500m -jar /opt/jido-rota/ors.jar
+Environment=ORS_CONFIG_LOCATION=/opt/jido-rota/ors-config.yml
+
+# Reinicia se cair, mas nao em loop rapido
+Restart=on-failure
+RestartSec=10
+
+# O build do grafo na primeira subida demora — nao matar por timeout
+TimeoutStartSec=infinity
+
+# Endurecimento basico
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/jido-rota
+
+[Install]
+WantedBy=multi-user.target
